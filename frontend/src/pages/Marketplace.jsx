@@ -275,7 +275,7 @@ const Marketplace = () => {
                   </div>
                 )}
                 <div style={{ position: 'absolute', top: '20px', left: '20px', background: 'rgba(255,255,255,0.95)', padding: '6px 14px', borderRadius: '12px', fontWeight: '900', fontSize: '0.8rem', color: 'var(--primary)', zIndex: 2, backdropFilter: 'blur(5px)' }}>
-                  {course.category.toUpperCase()}
+                  {course.category?.toUpperCase() || 'GENERAL'}
                 </div>
               </div>
               <div style={{ padding: '2.5rem' }}>
