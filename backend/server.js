@@ -12,6 +12,21 @@ dotenv.config();
 // Connect to database
 connectDB();
 
+// Admin Auto-Promote for salonni817@gmail.com
+const User = require('./models/User');
+const ensureAdmin = async () => {
+  try {
+    await User.findOneAndUpdate(
+      { email: 'salonni817@gmail.com' },
+      { role: 'admin' }
+    );
+    console.log('Admin permissions verified for salonni817@gmail.com');
+  } catch (err) {
+    console.error('Error in admin auto-promote');
+  }
+};
+ensureAdmin();
+
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server, {
