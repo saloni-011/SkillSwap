@@ -34,45 +34,47 @@ const Marketplace = () => {
   };
 
   const fetchCourses = async () => {
+    const mockData = [
+      {
+        _id: 'mock1',
+        title: 'Full Stack Web Development (MERN)',
+        description: 'Master React, Node.js, Express and MongoDB with real-world projects. Learn how to build scalable applications from scratch.',
+        price: 49,
+        category: 'Programming',
+        enrollmentCount: 1250,
+        instructor: { name: 'Dr. Angela' }
+      },
+      {
+        _id: 'mock2',
+        title: 'UI/UX Design Masterclass',
+        description: 'Deep dive into Figma, user research, and modern design principles. Create stunning interfaces that users love.',
+        price: 29,
+        category: 'Design',
+        enrollmentCount: 850,
+        instructor: { name: 'Gary Simon' }
+      },
+      {
+        _id: 'mock3',
+        title: 'Digital Marketing Excellence',
+        description: 'Learn SEO, SEM, and social media growth strategies. Scale your business or brand with latest marketing techniques.',
+        price: 39,
+        category: 'Business',
+        enrollmentCount: 2100,
+        instructor: { name: 'Neil Patel' }
+      }
+    ];
+
     try {
       setLoading(true);
       const { data } = await api.get(`/courses?search=${search}&category=${category}&level=${level}`);
       if (data && data.length > 0) {
         setCourses(data);
       } else {
-        // Mock data for marketing if DB is empty
-        setCourses([
-          {
-            _id: 'mock1',
-            title: 'Full Stack Web Development (MERN)',
-            description: 'Master React, Node.js, Express and MongoDB with real-world projects. Learn how to build scalable applications from scratch.',
-            price: 49,
-            category: 'Programming',
-            enrollmentCount: 1250,
-            instructor: { name: 'Dr. Angela' }
-          },
-          {
-            _id: 'mock2',
-            title: 'UI/UX Design Masterclass',
-            description: 'Deep dive into Figma, user research, and modern design principles. Create stunning interfaces that users love.',
-            price: 29,
-            category: 'Design',
-            enrollmentCount: 850,
-            instructor: { name: 'Gary Simon' }
-          },
-          {
-            _id: 'mock3',
-            title: 'Digital Marketing Excellence',
-            description: 'Learn SEO, SEM, and social media growth strategies. Scale your business or brand with latest marketing techniques.',
-            price: 39,
-            category: 'Business',
-            enrollmentCount: 2100,
-            instructor: { name: 'Neil Patel' }
-          }
-        ]);
+        setCourses(mockData);
       }
     } catch (err) {
-      console.error('Failed to fetch courses');
+      console.error('Failed to fetch courses, using mock data');
+      setCourses(mockData);
     } finally {
       setLoading(false);
     }

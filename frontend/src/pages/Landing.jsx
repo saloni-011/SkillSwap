@@ -25,7 +25,7 @@ const Landing = () => {
         <div className="container">
           <div style={{ gridTemplateColumns: '1.2fr 1fr', display: 'grid', gap: '40px', alignItems: 'center' }}>
             <div className="hero-content">
-              <span className="badge" style={{ marginBottom: '15px' }}>India's Most Loved Learning Platform</span>
+              <span className="badge" style={{ marginBottom: '15px' }}>v1.2 - India's Most Loved Learning Platform</span>
               <h1 style={{ fontSize: '3.5rem', fontWeight: 900, color: '#1a1a1b', lineHeight: 1.2, marginBottom: '20px' }}>
                 {banner.heroTitle || 'Ab Hoga Skill Exchange Sabke Liye Aasaan!'}
               </h1>
