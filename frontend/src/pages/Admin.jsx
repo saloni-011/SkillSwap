@@ -23,6 +23,8 @@ const Admin = () => {
   const [newSkill, setNewSkill] = useState({ name: '', category: 'Tech' });
   const [globalSkills, setGlobalSkills] = useState([]);
 
+  const [selectedUserDetails, setSelectedUserDetails] = useState(null);
+
   const filteredUsers = (users || []).filter(u =>
     u.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     u.email?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -221,6 +223,9 @@ const Admin = () => {
                 </td>
                 <td style={{ padding: '1rem', borderTopRightRadius: '1rem', borderBottomRightRadius: '1rem', textAlign: 'right' }}>
                   <div style={{ display: 'flex', gap: '5px', justifyContent: 'flex-end' }}>
+                    <button onClick={() => setSelectedUserDetails(u)} className="btn-icon" title="View Details">
+                      <Search size={16} color="var(--primary)" />
+                    </button>
                     {u.role === 'user' && (
                       <button onClick={() => handleUpdateRole(u._id, 'mentor')} className="btn-icon" title="Promote to Mentor">
                         <UserPlus size={16} color="#10b981" />
@@ -241,6 +246,64 @@ const Admin = () => {
           </tbody>
         </table>
       </div>
+
+      {selectedUserDetails && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 3000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
+          <div className="glass-card" style={{ width: '90%', maxWidth: '600px', padding: '2.5rem', background: 'white' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                <div style={{ width: '80px', height: '80px', background: 'var(--primary)', borderRadius: '25px', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', fontWeight: 900 }}>
+                  {selectedUserDetails.name[0]}
+                </div>
+                <div>
+                  <h2 style={{ fontSize: '1.8rem', fontWeight: 900 }}>{selectedUserDetails.name}</h2>
+                  <p style={{ color: 'var(--gray)', fontWeight: 700 }}>{selectedUserDetails.email}</p>
+                </div>
+              </div>
+              <button onClick={() => setSelectedUserDetails(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.5rem' }}>&times;</button>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+              <div>
+                <h4 style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--primary)', textTransform: 'uppercase', marginBottom: '1rem' }}>Account Details</h4>
+                <p><b>Role:</b> {selectedUserDetails.role.toUpperCase()}</p>
+                <p><b>Rating:</b> ⭐ {selectedUserDetails.rating?.toFixed(1) || '0.0'}</p>
+                <p><b>Joined:</b> {new Date(selectedUserDetails.createdAt).toLocaleDateString()}</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--primary)', textTransform: 'uppercase', marginBottom: '1rem' }}>Bio / Description</h4>
+                <p style={{ fontSize: '0.9rem', color: 'var(--dark)' }}>{selectedUserDetails.bio || 'No bio provided'}</p>
+              </div>
+            </div>
+
+            <div style={{ marginTop: '2rem' }}>
+              <h4 style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--primary)', textTransform: 'uppercase', marginBottom: '1rem' }}>Expertise & Goals</h4>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div style={{ background: '#f8fafc', padding: '1rem', borderRadius: '1rem' }}>
+                  <p style={{ fontWeight: 800, fontSize: '0.7rem', marginBottom: '0.5rem' }}>TEACHING</p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+                    {selectedUserDetails.skillsOffered?.map((sk, i) => (
+                      <span key={i} style={{ background: 'white', padding: '2px 8px', borderRadius: '5px', fontSize: '0.75rem', border: '1px solid #e2e8f0' }}>{sk.name}</span>
+                    ))}
+                    {(!selectedUserDetails.skillsOffered || selectedUserDetails.skillsOffered.length === 0) && <span style={{ color: 'var(--gray)', fontSize: '0.75rem' }}>None</span>}
+                  </div>
+                </div>
+                <div style={{ background: '#f8fafc', padding: '1rem', borderRadius: '1rem' }}>
+                  <p style={{ fontWeight: 800, fontSize: '0.7rem', marginBottom: '0.5rem' }}>LEARNING</p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+                    {selectedUserDetails.skillsWanted?.map((sk, i) => (
+                      <span key={i} style={{ background: 'white', padding: '2px 8px', borderRadius: '5px', fontSize: '0.75rem', border: '1px solid #e2e8f0' }}>{sk.name}</span>
+                    ))}
+                    {(!selectedUserDetails.skillsWanted || selectedUserDetails.skillsWanted.length === 0) && <span style={{ color: 'var(--gray)', fontSize: '0.75rem' }}>None</span>}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button onClick={() => setSelectedUserDetails(null)} className="btn btn-primary" style={{ width: '100%', marginTop: '2.5rem' }}>Close Record</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 

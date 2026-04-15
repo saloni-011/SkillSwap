@@ -154,35 +154,71 @@ const Chat = () => {
                 </div>
               </div>
 
-              {/* Messages Area */}
-              <div style={{ flex: 1, overflowY: 'auto', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem', background: 'radial-gradient(circle at center, #f8fafc 0%, #f1f5f9 100%)' }}>
-                {messages.length === 0 && (
-                  <div style={{ textAlign: 'center', margin: 'auto', color: 'var(--gray)', opacity: 0.6 }}>
-                    <MessageSquare size={48} style={{ marginBottom: '1rem' }} />
-                    <p>No messages yet. Send a greeting!</p>
-                  </div>
-                )}
-                {messages.map((msg, i) => (
-                  <div 
-                    key={i} 
-                    style={{ 
-                      alignSelf: msg.sender === user._id ? 'flex-end' : 'flex-start',
-                      maxWidth: '70%',
-                      padding: '0.85rem 1.25rem',
-                      borderRadius: '1.25rem',
-                      background: msg.sender === user._id ? 'var(--primary)' : 'white',
-                      color: msg.sender === user._id ? 'white' : 'var(--dark)',
-                      boxShadow: msg.sender === user._id ? '0 10px 15px -3px rgba(99, 102, 241, 0.3)' : '0 4px 6px -1px rgba(0,0,0,0.05)',
-                      borderTopRightRadius: msg.sender === user._id ? '0.25rem' : '1.25rem',
-                      borderTopLeftRadius: msg.sender !== user._id ? '0.25rem' : '1.25rem',
-                      fontSize: '0.95rem',
-                      lineHeight: '1.4'
-                    }}
-                  >
-                    {msg.text}
-                  </div>
-                ))}
-                <div ref={scrollRef} />
+              <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+                {/* Messages Area */}
+                <div style={{ flex: 1, overflowY: 'auto', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem', background: 'radial-gradient(circle at center, #f8fafc 0%, #f1f5f9 100%)' }}>
+                  {messages.length === 0 && (
+                    <div style={{ textAlign: 'center', margin: 'auto', color: 'var(--gray)', opacity: 0.6 }}>
+                      <MessageSquare size={48} style={{ marginBottom: '1rem' }} />
+                      <p>No messages yet. Send a greeting!</p>
+                    </div>
+                  )}
+                  {messages.map((msg, i) => (
+                    <div 
+                      key={i} 
+                      style={{ 
+                        alignSelf: msg.sender === user._id ? 'flex-end' : 'flex-start',
+                        maxWidth: '70%',
+                        padding: '0.85rem 1.25rem',
+                        borderRadius: '1.25rem',
+                        background: msg.sender === user._id ? 'var(--primary)' : 'white',
+                        color: msg.sender === user._id ? 'white' : 'var(--dark)',
+                        boxShadow: msg.sender === user._id ? '0 10px 15px -3px rgba(99, 102, 241, 0.3)' : '0 4px 6px -1px rgba(0,0,0,0.05)',
+                        borderTopRightRadius: msg.sender === user._id ? '0.25rem' : '1.25rem',
+                        borderTopLeftRadius: msg.sender !== user._id ? '0.25rem' : '1.25rem',
+                        fontSize: '0.95rem',
+                        lineHeight: '1.4'
+                      }}
+                    >
+                      {msg.text}
+                    </div>
+                  ))}
+                  <div ref={scrollRef} />
+                </div>
+
+                {/* Skill Swap Info - Right Panel */}
+                <div style={{ width: '300px', background: 'white', borderLeft: '1px solid #f1f5f9', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                    <div>
+                        <h4 style={{ fontSize: '0.75rem', fontWeight: '900', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem' }}>Swap Context</h4>
+                        <div style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '1rem', border: '1px solid #f1f5f9' }}>
+                            <p style={{ fontSize: '0.8rem', fontWeight: '700', marginBottom: '8px', color: 'var(--dark)' }}>Teaching you</p>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+                                {selectedUser.skillsOffered?.map((sk, i) => (
+                                    <span key={i} style={{ background: 'white', padding: '3px 8px', borderRadius: '6px', fontSize: '0.7rem', fontWeight: '800', border: '1px solid #e2e8f0', color: 'var(--primary)' }}>{sk.name}</span>
+                                ))}
+                            </div>
+                        </div>
+                        <div style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '1rem', border: '1px solid #f1f5f9', marginTop: '1rem' }}>
+                            <p style={{ fontSize: '0.8rem', fontWeight: '700', marginBottom: '8px', color: 'var(--dark)' }}>Learning from you</p>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+                                {selectedUser.skillsWanted?.map((sk, i) => (
+                                    <span key={i} style={{ background: 'white', padding: '3px 8px', borderRadius: '6px', fontSize: '0.7rem', fontWeight: '800', border: '1px solid #e2e8f0', color: 'var(--secondary)' }}>{sk.name}</span>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style={{ marginTop: 'auto' }}>
+                        <button 
+                            className="btn btn-primary" 
+                            style={{ width: '100%', marginBottom: '0.5rem' }}
+                            onClick={() => window.location.href='/scheduler'}
+                        >
+                            Schedule Session
+                        </button>
+                        <p style={{ fontSize: '0.7rem', textAlign: 'center', color: 'var(--gray)', fontWeight: '600' }}>Confirm swap details before scheduling</p>
+                    </div>
+                </div>
               </div>
 
               {/* Input Area */}
