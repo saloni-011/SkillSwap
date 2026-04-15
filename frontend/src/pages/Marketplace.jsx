@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
-import { Search, Filter, MessageSquare, UserPlus, Star, ChevronRight, SlidersHorizontal, MapPin } from 'lucide-react';
+import { Search, Filter, MessageSquare, UserPlus, Star, ChevronRight, SlidersHorizontal, MapPin, BookOpen } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const Marketplace = () => {
   const [users, setUsers] = useState([]);
