@@ -284,12 +284,50 @@ const Dashboard = () => {
   const renderCertificates = () => (
     <section>
       <h2 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <Star color="var(--primary)" /> Your Certificates
+        <Star color="var(--primary)" /> Professional Certifications
       </h2>
-      <div style={{ padding: '60px', textAlign: 'center', background: '#f8fafc', borderRadius: '2rem' }}>
-        <Star size={40} style={{ opacity: 0.1, marginBottom: '10px' }} />
-        <p style={{ fontWeight: '600', color: 'var(--gray)' }}>Complete sessions to earn certificates of excellence.</p>
-        <p style={{ fontSize: '0.9rem', color: 'var(--gray)', marginTop: '0.5rem' }}>Your achievements will appear here.</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+        {(user?.certificates || []).map((cert, i) => (
+          <div key={i} className="pw-card" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)', border: '1px solid #e2e8f0', padding: '30px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', top: '-10px', right: '-10px', opacity: 0.1 }}>
+              <Star size={100} fill="var(--primary)" color="var(--primary)" />
+            </div>
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <div style={{ color: 'var(--primary)', fontWeight: 900, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '10px' }}>Certificate of Excellence</div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 900, marginBottom: '15px' }}>{cert.title}</h3>
+              <div style={{ fontSize: '0.85rem', color: 'var(--gray)', marginBottom: '5px' }}>Issued by: <b>{cert.issuer}</b></div>
+              <div style={{ fontSize: '0.85rem', color: 'var(--gray)' }}>Date: {new Date(cert.issueDate).toLocaleDateString()}</div>
+              <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
+                <button className="btn btn-outline" style={{ scale: '0.8', transformOrigin: 'left' }}>Download PDF</button>
+              </div>
+            </div>
+          </div>
+        ))}
+        {(!user?.certificates || user?.certificates.length === 0) && (
+          <div style={{ gridColumn: '1 / -1', padding: '60px', textAlign: 'center', background: '#f8fafc', borderRadius: '2rem', border: '2px dashed #e2e8f0' }}>
+            <Star size={48} style={{ opacity: 0.1, marginBottom: '1rem', color: 'var(--primary)' }} />
+            <h3 style={{ fontWeight: 800 }}>No Certificates Yet</h3>
+            <p style={{ color: 'var(--gray)', fontSize: '0.9rem', maxWidth: '400px', margin: '15px auto' }}>
+              Complete your profile and host successful learning sessions to earn official skill badges.
+            </p>
+            {user?.skillsOffered?.length > 0 && (
+              <button 
+                onClick={async () => {
+                  const newCert = {
+                    title: `Expert in ${user.skillsOffered[0].name}`,
+                    issuer: 'SkillSwap Mastery'
+                  };
+                  try {
+                    await updateProfile({ certificates: [...(user.certificates || []), newCert] });
+                  } catch (err) { }
+                }}
+                className="btn btn-primary" style={{ marginTop: '1rem' }}
+              >
+                Claim Skill Recognition
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

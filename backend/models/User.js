@@ -79,6 +79,13 @@ const userSchema = mongoose.Schema(
       type: String,
       default: '',
     },
+    certificates: [
+      {
+        title: String,
+        issueDate: { type: Date, default: Date.now },
+        issuer: { type: String, default: 'SkillSwap Official' }
+      }
+    ],
   },
   {
     timestamps: true,
