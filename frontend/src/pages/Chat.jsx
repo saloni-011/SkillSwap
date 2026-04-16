@@ -24,9 +24,9 @@ const Chat = () => {
     const fetchMatches = async () => {
       try {
         const { data } = await api.get('/matches');
-        // Status accepted only
-        const accepted = data.filter(m => m.status === 'accepted');
-        setMatches(accepted);
+        // Show both accepted and pending connections in chat
+        const filtered = data.filter(m => m.status === 'accepted' || m.status === 'pending');
+        setMatches(filtered);
       } catch (err) {
         console.error('Error fetching matches:', err);
       }
@@ -125,8 +125,15 @@ const Chat = () => {
                       <div style={{ position: 'absolute', bottom: '-2px', right: '-2px', width: '14px', height: '14px', background: '#10b981', border: '3px solid white', borderRadius: '50%' }}></div>
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <h4 style={{ fontSize: '1rem', fontWeight: '700', color: isSelected ? 'var(--primary)' : 'var(--dark)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{partner.name}</h4>
-                      <p style={{ fontSize: '0.8rem', color: 'var(--gray)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Click to continue learning</p>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <h4 style={{ fontSize: '1rem', fontWeight: '700', color: isSelected ? 'var(--primary)' : 'var(--dark)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{partner.name}</h4>
+                        {match.status === 'pending' && (
+                          <span style={{ fontSize: '0.65rem', background: '#fff7ed', color: '#f97316', padding: '2px 6px', borderRadius: '4px', fontWeight: '800' }}>PENDING</span>
+                        )}
+                      </div>
+                      <p style={{ fontSize: '0.8rem', color: 'var(--gray)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {match.status === 'pending' ? 'Waiting for approval' : 'Click to continue learning'}
+                      </p>
                     </div>
                   </div>
                 );

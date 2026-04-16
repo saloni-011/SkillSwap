@@ -69,14 +69,34 @@ const getSuggestions = async (req, res) => {
   const offeredNames = user.skillsOffered.map(s => s.name);
   const wantedNames = user.skillsWanted.map(s => s.name);
 
-  // Find users who offer what I want OR want what I offer
-  const suggestions = await User.find({
+  // 1. Try to find smart matches (overlapping skills)
+  let query = {
     _id: { $ne: req.user._id },
     $or: [
       { 'skillsOffered.name': { $in: wantedNames } },
       { 'skillsWanted.name': { $in: offeredNames } }
     ]
-  }).limit(10).select('-password');
+  };
+
+  let suggestions = await User.find(query).limit(10).select('-password');
+
+  // 2. Fallback: If no smart matches, show top rated mentors
+  if (suggestions.length === 0) {
+    suggestions = await User.find({ 
+      _id: { $ne: req.user._id },
+      role: { $in: ['mentor', 'admin'] } 
+    })
+    .sort({ rating: -1 })
+    .limit(10)
+    .select('-password');
+  }
+
+  // 3. Fallback 2: If still nothing, just show any active users
+  if (suggestions.length === 0) {
+    suggestions = await User.find({ _id: { $ne: req.user._id } })
+    .limit(10)
+    .select('-password');
+  }
 
   res.json(suggestions);
 };

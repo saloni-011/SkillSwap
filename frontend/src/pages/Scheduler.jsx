@@ -23,7 +23,7 @@ const Scheduler = () => {
       const sRes = await api.get('/sessions');
       setSessions(sRes.data);
       const mRes = await api.get('/matches');
-      setMatches(mRes.data.filter(m => m.status === 'accepted'));
+      setMatches(mRes.data.filter(m => m.status === 'accepted' || m.status === 'pending'));
     } catch (err) {
       console.error('Error fetching scheduler data');
     } finally {
